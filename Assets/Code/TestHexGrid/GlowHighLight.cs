@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,9 +14,13 @@ public class GlowHighLight : MonoBehaviour
 
     private bool isGlowing = false;
 
+    Color validSpaceColor = Color.green;
+    Color originalGlowColor;
+
     private void Awake()
     {
         PrepareMaterialDictionaries();
+        originalGlowColor = glowMaterial.GetColor("_GlowColor");
     }
     void PrepareMaterialDictionaries()
     {
@@ -37,11 +42,37 @@ public class GlowHighLight : MonoBehaviour
             glowMaterialDict.Add(renderer, newMaterials);
         }
     }
+
+    internal void HighlightValidPath()
+    {
+        if (isGlowing == false)
+            return;
+        foreach (Renderer renderer in glowMaterialDict.Keys)
+        {
+            foreach (var item in glowMaterialDict[renderer])
+            {
+                item.SetColor("_GlowColor", validSpaceColor);
+            }
+        }
+    }
+
+    internal void ResetGlowHighlight()
+    {
+        foreach (Renderer renderer in glowMaterialDict.Keys)
+        {
+            foreach(var item in glowMaterialDict[renderer])
+            {
+                item.SetColor("_GlowColor", originalGlowColor);
+            }
+        }
+    }
+
     public void ToggleGlow()
     {
         if (isGlowing == false)
         {
-            foreach(Renderer renderer in originalMaterialDict.Keys)
+            ResetGlowHighlight();
+            foreach (Renderer renderer in originalMaterialDict.Keys)
             {
                 renderer.materials = glowMaterialDict[renderer];
             }

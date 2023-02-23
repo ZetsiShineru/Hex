@@ -14,10 +14,10 @@ public class HexCoordinates : MonoBehaviour
 
     private void Awake()
     {
-        offsetCoordinates = ConvertPositionToOddset(transform.position);
+        offsetCoordinates = ConvertPositionToOffset(transform.position);
     }
 
-    Vector3Int ConvertPositionToOddset(Vector3 position)
+    public static Vector3Int ConvertPositionToOffset(Vector3 position)
     {
         int x = Mathf.CeilToInt(position.x / xOffset);
         int y = Mathf.RoundToInt(position.y / yOffset);

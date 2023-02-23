@@ -7,11 +7,11 @@ public class PlayerInput : MonoBehaviour
 {
     public UnityEvent<Vector3> PointerClick;
 
-    private void Update()
-    {
-        DetectMouseClick();
-    }
-    void DetectMouseClick()
+    //private void Update()
+    //{
+    //    DetectMouseClick();
+    //}
+    public void DetectMouseClick()
     {
         if(Input.GetMouseButtonDown(0))
         {

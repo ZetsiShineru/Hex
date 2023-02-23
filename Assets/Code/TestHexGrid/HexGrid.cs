@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,13 +32,14 @@ public class HexGrid : MonoBehaviour
     Dictionary<Vector3Int, Hex> hexTileDict = new Dictionary<Vector3Int, Hex>();
     Dictionary<Vector3Int, List<Vector3Int>> hexTileNeighboursDict = new Dictionary<Vector3Int, List<Vector3Int>>();
 
+    List<Hex> hightLightHex = new List<Hex>();
+
     private void Start()
     {
         foreach(Hex hex in FindObjectsOfType<Hex>())
         {
             hexTileDict[hex.HexCoords] = hex;
         }
-        
     }
     public Hex GetTileAt(Vector3Int hexCoordinates)
     {
@@ -62,5 +64,31 @@ public class HexGrid : MonoBehaviour
             }
         }
         return hexTileNeighboursDict[hexCoordinates];
+    }
+    public Vector3Int GetClosetHex(Vector3 worldPosition)
+    {
+        worldPosition.y = 0;
+        return HexCoordinates.ConvertPositionToOffset(worldPosition);
+    }
+    public void turnOnHighLight(int hexZone)
+    {
+        foreach (Hex hex in FindObjectsOfType<Hex>())
+        {
+            if(hex.CheckHexZone(hexZone)&&hex.CheckSpawnType())
+            {
+                hex.EnableHighlight();
+                hex.HighlightPath();
+                hightLightHex.Add(hex);
+            }
+        }
+    }
+    public void turnOffHighLight()
+    {
+        foreach (Hex hex in hightLightHex)
+        {
+            hex.ResetHighlight();
+            hex.DisableHighlight();
+        }
+        hightLightHex.Clear();
     }
 }
